@@ -6,51 +6,37 @@ import java.util.*;
  * ============================================================
  *
  * Description:
- * Demonstrates sorting using Bubble Sort algorithm.
+ * Demonstrates sorting bogie names using Arrays.sort().
  *
- * @version 16.0
+ * @version 17.0
  */
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        System.out.println("UC16 - Bubble Sort for Passenger Bogie Capacities");
+        System.out.println("UC17 - Sort Bogie Names using Arrays.sort()");
         System.out.println("====================================================\n");
 
-        // Array of capacities
-        int[] capacities = {72, 56, 24, 70, 60};
+        // Array of bogie names
+        String[] bogieNames = {
+                "Sleeper",
+                "AC Chair",
+                "First Class",
+                "General",
+                "Luxury"
+        };
 
-        System.out.println("Original Capacities:");
-        printArray(capacities);
+        // Display original
+        System.out.println("Original Bogie Names:");
+        System.out.println(Arrays.toString(bogieNames));
 
-        // BUBBLE SORT
-        int n = capacities.length;
+        // SORT using built-in method
+        Arrays.sort(bogieNames);
 
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
+        // Display sorted
+        System.out.println("\nSorted Bogie Names:");
+        System.out.println(Arrays.toString(bogieNames));
 
-                if (capacities[j] > capacities[j + 1]) {
-
-                    // SWAP
-                    int temp = capacities[j];
-                    capacities[j] = capacities[j + 1];
-                    capacities[j + 1] = temp;
-                }
-            }
-        }
-
-        // OUTPUT
-        System.out.println("\nSorted Capacities:");
-        printArray(capacities);
-
-        System.out.println("\nUC16 sorting completed...");
-    }
-
-    // Helper method
-    public static void printArray(int[] arr) {
-        for (int val : arr) {
-            System.out.print(val + " ");
-        }
-        System.out.println();
+        System.out.println("\nUC17 sorting completed...");
     }
 }
