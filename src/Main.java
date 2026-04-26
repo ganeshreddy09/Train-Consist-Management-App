@@ -1,77 +1,75 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class TrainConsistApp {
-
-    // Bogie class
-    static class Bogie {
-        private String id;
-        private int capacity;
-
-        public Bogie(String id, int capacity) {
-            this.id = id;
-            this.capacity = capacity;
-        }
-
-        public int getCapacity() {
-            return capacity;
-        }
-
-        public String getId() {
-            return id;
-        }
-    }
+/**
+ * ============================================================
+ * MAIN CLASS - TrainConsistManagementApp
+ * ============================================================
+ *
+ * Description:
+ * Demonstrates safe cargo assignment using try-catch-finally.
+ *
+ * @version 15.0
+ */
+public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        // Step 1: Create dataset
-        List<Bogie> bogies = new ArrayList<>();
+        System.out.println("UC15 - Safe Cargo Assignment");
+        System.out.println("====================================================\n");
 
-        for (int i = 1; i <= 10000; i++) {
-            bogies.add(new Bogie("B" + i, (int)(Math.random() * 100)));
-        }
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
 
-        // -------------------------------
-        // LOOP-BASED FILTERING
-        // -------------------------------
-        long startLoop = System.nanoTime();
+        // SAFE assignment
+        b1.assignCargo("Petroleum");
 
-        List<Bogie> loopResult = new ArrayList<>();
-        for (Bogie b : bogies) {
-            if (b.getCapacity() > 60) {
-                loopResult.add(b);
+        System.out.println();
+
+        // UNSAFE assignment
+        b2.assignCargo("Petroleum");
+
+        System.out.println("\nUC15 cargo handling completed...");
+    }
+}
+
+/**
+ * CLASS - GoodsBogie
+ */
+class GoodsBogie {
+
+    String shape;
+    String cargo;
+
+    public GoodsBogie(String shape) {
+        this.shape = shape;
+    }
+
+    public void assignCargo(String cargo) {
+
+        try {
+            // VALIDATION
+            if (shape.equals("Rectangular") && cargo.equals("Petroleum")) {
+                throw new CargoSafetyException("Unsafe: Petroleum cannot be stored in Rectangular bogie");
             }
+
+            this.cargo = cargo;
+            System.out.println("Cargo assigned successfully: " + shape + " -> " + cargo);
+
+        } catch (CargoSafetyException e) {
+            System.out.println("Error: " + e.getMessage());
+
+        } finally {
+            System.out.println("Assignment attempt completed for " + shape);
         }
+    }
+}
 
-        long endLoop = System.nanoTime();
-        long loopTime = endLoop - startLoop;
+/**
+ * CUSTOM RUNTIME EXCEPTION
+ */
+class CargoSafetyException extends RuntimeException {
 
-        // -------------------------------
-        // STREAM-BASED FILTERING
-        // -------------------------------
-        long startStream = System.nanoTime();
-
-        List<Bogie> streamResult = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
-
-        long endStream = System.nanoTime();
-        long streamTime = endStream - startStream;
-
-        // -------------------------------
-        // OUTPUT
-        // -------------------------------
-        System.out.println("Loop Result Count: " + loopResult.size());
-        System.out.println("Stream Result Count: " + streamResult.size());
-
-        System.out.println("Loop Time (ns): " + loopTime);
-        System.out.println("Stream Time (ns): " + streamTime);
-
-        // Verify results match
-        if (loopResult.size() == streamResult.size()) {
-            System.out.println("Results are consistent");
-        } else {
-            System.out.println("Results mismatch");
-        }
+    public CargoSafetyException(String message) {
+        super(message);
     }
 }
