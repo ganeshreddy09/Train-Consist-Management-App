@@ -1,48 +1,55 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * ============================================================
+ * MAIN CLASS - TrainConsistManagementApp
+ * ============================================================
+ *
+ * Description:
+ * Demonstrates filtering bogies using Java Stream API.
+ *
+ * @author Developer
+ * @version 8.0
+ */
 public class TrainConsistManagementApp {
-
-    // Search Method with Fail-Fast Validation
-    public static boolean searchBogie(String[] bogieIds, String key) {
-
-        // Step 1: Validate state (Fail-Fast)
-        if (bogieIds == null || bogieIds.length == 0) {
-            throw new IllegalStateException("Cannot perform search: No bogies available in the train.");
-        }
-
-        // Step 2: Perform Linear Search (can also reuse Binary Search)
-        for (String id : bogieIds) {
-            if (id.equals(key)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public static void main(String[] args) {
 
-        // Example 1: Empty bogie list (to trigger exception)
-        String[] bogieIds = {};
+        System.out.println("=== Train Consist Management App ===\n");
 
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Bogie ID to search: ");
-        String key = sc.nextLine();
+        // Create bogie list (same as UC7)
+        List<Bogie> bogies = new ArrayList<>();
 
-        try {
-            boolean found = searchBogie(bogieIds, key);
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
 
-            if (found) {
-                System.out.println("Bogie ID " + key + " FOUND ✔");
-            } else {
-                System.out.println("Bogie ID " + key + " NOT FOUND ❌");
-            }
+        // FILTER bogies with capacity > 60
+        List<Bogie> filtered = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
 
-        } catch (IllegalStateException e) {
-            // Handle fail-fast exception
-            System.out.println("ERROR: " + e.getMessage());
+        // DISPLAY filtered bogies
+        System.out.println("High Capacity Bogies (> 60):\n");
+
+        for (Bogie b : filtered) {
+            System.out.println("Bogie: " + b.name +
+                    " | Capacity: " + b.capacity);
         }
+    }
+}
 
-        sc.close();
+/**
+ * CLASS - Bogie
+ */
+class Bogie {
+
+    String name;
+    int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
     }
 }
