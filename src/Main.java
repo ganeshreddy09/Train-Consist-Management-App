@@ -6,70 +6,51 @@ import java.util.*;
  * ============================================================
  *
  * Description:
- * Demonstrates safe cargo assignment using try-catch-finally.
+ * Demonstrates sorting using Bubble Sort algorithm.
  *
- * @version 15.0
+ * @version 16.0
  */
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        System.out.println("UC15 - Safe Cargo Assignment");
+        System.out.println("UC16 - Bubble Sort for Passenger Bogie Capacities");
         System.out.println("====================================================\n");
 
-        GoodsBogie b1 = new GoodsBogie("Cylindrical");
-        GoodsBogie b2 = new GoodsBogie("Rectangular");
+        // Array of capacities
+        int[] capacities = {72, 56, 24, 70, 60};
 
-        // SAFE assignment
-        b1.assignCargo("Petroleum");
+        System.out.println("Original Capacities:");
+        printArray(capacities);
 
-        System.out.println();
+        // BUBBLE SORT
+        int n = capacities.length;
 
-        // UNSAFE assignment
-        b2.assignCargo("Petroleum");
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
 
-        System.out.println("\nUC15 cargo handling completed...");
-    }
-}
+                if (capacities[j] > capacities[j + 1]) {
 
-/**
- * CLASS - GoodsBogie
- */
-class GoodsBogie {
-
-    String shape;
-    String cargo;
-
-    public GoodsBogie(String shape) {
-        this.shape = shape;
-    }
-
-    public void assignCargo(String cargo) {
-
-        try {
-            // VALIDATION
-            if (shape.equals("Rectangular") && cargo.equals("Petroleum")) {
-                throw new CargoSafetyException("Unsafe: Petroleum cannot be stored in Rectangular bogie");
+                    // SWAP
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                }
             }
-
-            this.cargo = cargo;
-            System.out.println("Cargo assigned successfully: " + shape + " -> " + cargo);
-
-        } catch (CargoSafetyException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } finally {
-            System.out.println("Assignment attempt completed for " + shape);
         }
+
+        // OUTPUT
+        System.out.println("\nSorted Capacities:");
+        printArray(capacities);
+
+        System.out.println("\nUC16 sorting completed...");
     }
-}
 
-/**
- * CUSTOM RUNTIME EXCEPTION
- */
-class CargoSafetyException extends RuntimeException {
-
-    public CargoSafetyException(String message) {
-        super(message);
+    // Helper method
+    public static void printArray(int[] arr) {
+        for (int val : arr) {
+            System.out.print(val + " ");
+        }
+        System.out.println();
     }
 }
